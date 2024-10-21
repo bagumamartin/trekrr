@@ -10,6 +10,8 @@ import SwiftData
 
 @main
 struct TrekrrApp: App {
+    @StateObject var locations = Locations()
+    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
@@ -25,7 +27,29 @@ struct TrekrrApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TabView {
+                NavigationView {
+                    ContentView(location: locations.primary)
+                }
+                .tabItem {
+                    Image(systemName: "figure.hiking")
+                    Text("Discover")
+                }
+                NavigationView {
+                    WorldView()
+                }
+                .tabItem {
+                    Image(systemName: "globe.europe.africa")
+                    Text("Locations")
+                }
+                NavigationView {
+                    TipsView()
+                }
+                .tabItem {
+                    Image(systemName: "list.bullet")
+                    Text("Tips")
+                }
+            }.environmentObject(locations)
         }
         .modelContainer(sharedModelContainer)
     }
